@@ -1,0 +1,11 @@
+_commit: 9c2eb86
+_src_path: /Users/kschaper/Monarch/kozahub/cookiecutter-monarch-ingest
+copyright_year: '2026'
+email: info@monarchinitiative.org
+full_name: Monarch Initiative
+github_handle: monarch-initiative
+github_org: monarch-initiative
+license: BSD-3-Clause
+project_description: BGee gene to expression ingest
+project_name: bgee-ingest
+project_slug: bgee_ingest
