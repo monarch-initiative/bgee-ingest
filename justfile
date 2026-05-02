@@ -20,10 +20,14 @@ setup: _git-init install _git-add
 install:
     uv sync --group dev
 
-# Download source data
+# Resolve BGEE_VERSION (highest FTP dir with data) and download
 [group('ingest')]
 download: install
-    uv run downloader download.yaml
+    # Cache the resolved version so `metadata` sees the same value the
+    # downloader actually used, even if the FTP listing changes mid-run.
+    mkdir -p data
+    uv run python scripts/resolve_bgee_version.py > data/.bgee-version
+    BGEE_VERSION=$(cat data/.bgee-version) uv run downloader download.yaml
 
 # Run all transforms
 [group('ingest')]
@@ -40,7 +44,8 @@ transform-all: download
 # Emit output/release-metadata.yaml describing this build's upstream sources and artifacts
 [group('ingest')]
 metadata:
-    uv run python scripts/write_metadata.py
+    BGEE_VERSION=$( [ -f data/.bgee-version ] && cat data/.bgee-version || uv run python scripts/resolve_bgee_version.py ) \
+        uv run python scripts/write_metadata.py
 
 # Run full pipeline: install, download, transform, metadata, test
 [group('ingest')]

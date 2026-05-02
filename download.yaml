@@ -4,30 +4,33 @@
 ### For more information, see https://github.com/monarch-initiative/kghub-downloader
 ---
 # Download configuration for bgee-ingest
-# 11 species-specific expression files from BGee v15.0
+# 11 species-specific expression files. The {BGEE_VERSION} placeholder is
+# substituted by kghub-downloader from the BGEE_VERSION env var, which is
+# resolved by `scripts/resolve_bgee_version.py` (probes https://bgee.org/ftp/
+# for the highest bgee_vM_N directory that contains expression call data).
 
 # Non-model organism species (actively used in transform)
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Homo_sapiens_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Homo_sapiens_expr_simple.tsv.gz"
   local_name: "data/Homo_sapiens_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Bos_taurus_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Bos_taurus_expr_simple.tsv.gz"
   local_name: "data/Bos_taurus_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Canis_lupus_familiaris_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Canis_lupus_familiaris_expr_simple.tsv.gz"
   local_name: "data/Canis_lupus_familiaris_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Gallus_gallus_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Gallus_gallus_expr_simple.tsv.gz"
   local_name: "data/Gallus_gallus_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Sus_scrofa_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Sus_scrofa_expr_simple.tsv.gz"
   local_name: "data/Sus_scrofa_expr_simple.tsv.gz"
 
 # Model organisms (commented out in transform but available for download)
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Rattus_norvegicus_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Rattus_norvegicus_expr_simple.tsv.gz"
   local_name: "data/Rattus_norvegicus_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Mus_musculus_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Mus_musculus_expr_simple.tsv.gz"
   local_name: "data/Mus_musculus_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Danio_rerio_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Danio_rerio_expr_simple.tsv.gz"
   local_name: "data/Danio_rerio_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Xenopus_laevis_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Xenopus_laevis_expr_simple.tsv.gz"
   local_name: "data/Xenopus_laevis_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Drosophila_melanogaster_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Drosophila_melanogaster_expr_simple.tsv.gz"
   local_name: "data/Drosophila_melanogaster_expr_simple.tsv.gz"
-- url: "https://bgee.org/ftp/bgee_v15_0/download/calls/expr_calls/Caenorhabditis_elegans_expr_simple.tsv.gz"
+- url: "https://bgee.org/ftp/bgee_v{BGEE_VERSION}/download/calls/expr_calls/Caenorhabditis_elegans_expr_simple.tsv.gz"
   local_name: "data/Caenorhabditis_elegans_expr_simple.tsv.gz"
