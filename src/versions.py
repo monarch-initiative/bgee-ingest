@@ -23,13 +23,13 @@ from kozahub_metadata_schema import now_iso, urls_from_download_yaml
 INGEST_DIR = Path(__file__).resolve().parents[1]
 DOWNLOAD_YAML = INGEST_DIR / "download.yaml"
 
-BGEE_FTP_INDEX = "https://bgee.org/ftp/"
+# Must be the `www.` host: the bare `bgee.org` apex sits behind a Cloudflare
+# managed challenge that returns HTTP 403 (`cf-mitigated: challenge`) to every
+# non-browser client regardless of User-Agent. `www.bgee.org` serves the same
+# files with no challenge.
+BGEE_FTP_INDEX = "https://www.bgee.org/ftp/"
 EXPR_CALLS_PATH = "download/calls/expr_calls/"
 SENTINEL_HREF_PATTERN = re.compile(r'href="[^"]+_expr_(?:simple|advanced)\.tsv\.gz"')
-
-# Used if the probe fails (network down, layout changed). Should match the
-# version baked into download.yaml fallback expectations.
-FALLBACK_VERSION_URL_FORM = "15_2"
 
 
 def _list_versioned_dirs(timeout: int = 15) -> list[tuple[int, int]]:
@@ -42,6 +42,15 @@ def _list_versioned_dirs(timeout: int = 15) -> list[tuple[int, int]]:
 
 
 def _has_expr_calls(major: int, minor: int, timeout: int = 10) -> bool:
+    """True only if this version actually publishes expression call files.
+
+    Note bgee.org answers unknown FTP paths with the site's single-page app
+    under HTTP 200 rather than a 404, so a status check alone cannot tell a
+    real directory from a missing one. The sentinel href search is what makes
+    this reliable: the SPA contains no `*_expr_simple.tsv.gz` links. As of
+    Bgee 16.0 this matters in practice -- 16.0 ships only `h5ad/` and
+    `processed_expr_values/`, and every `calls/` path under it soft-200s.
+    """
     url = f"{BGEE_FTP_INDEX}bgee_v{major}_{minor}/{EXPR_CALLS_PATH}"
     try:
         r = requests.get(url, timeout=timeout)
@@ -56,17 +65,22 @@ def latest_bgee_version() -> str:
     """Return the highest bgee_vM_N directory that contains expression call data.
 
     Returns the version in URL-form (e.g. `"15_2"`), suitable for substitution
-    into download.yaml. Falls back to FALLBACK_VERSION_URL_FORM if the probe
-    fails so CI doesn't break when bgee.org is unreachable.
+    into download.yaml. Automatically adopts a new Bgee release as soon as that
+    release publishes expression calls.
+
+    Raises on failure rather than falling back to a pinned version. A pinned
+    fallback cannot rescue a build -- the downloads target the same host that
+    just failed the probe -- it only hides the cause and lets the build report
+    an upstream version it never actually verified.
     """
-    try:
-        candidates = _list_versioned_dirs()
-    except requests.RequestException:
-        return FALLBACK_VERSION_URL_FORM
+    candidates = _list_versioned_dirs()
     for major, minor in reversed(candidates):
         if _has_expr_calls(major, minor):
             return f"{major}_{minor}"
-    return FALLBACK_VERSION_URL_FORM
+    raise RuntimeError(
+        f"No Bgee version under {BGEE_FTP_INDEX} publishes expression calls "
+        f"at {EXPR_CALLS_PATH} (checked: {candidates or 'none found'})."
+    )
 
 
 def resolve_version() -> str:
