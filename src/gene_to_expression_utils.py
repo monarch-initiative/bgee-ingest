@@ -1,4 +1,3 @@
-import uuid
 from typing import Dict, List, Union
 
 import pandas as pd
@@ -47,7 +46,6 @@ def write_group(rows: List, koza_app: KozaApp):
             object_specialization_qualifier = anatomical_entities[1]
 
         association = GeneToExpressionSiteAssociation(
-            id="uuid:" + str(uuid.uuid1()),
             subject="ENSEMBL:" + row["Gene ID"],
             predicate="biolink:expressed_in",
             object=obj,

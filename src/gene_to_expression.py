@@ -1,4 +1,3 @@
-import uuid
 
 import koza
 import pandas as pd
@@ -34,7 +33,6 @@ def transform_bgee_data(koza_transform, data):
                 object_specialization_qualifier = anatomical_entities[1]
 
             association = GeneToExpressionSiteAssociation(
-                id="uuid:" + str(uuid.uuid1()),
                 subject="ENSEMBL:" + row["Gene ID"],
                 predicate="biolink:expressed_in",
                 object=obj,
